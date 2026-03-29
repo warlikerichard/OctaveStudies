@@ -1,14 +1,3 @@
-% Teste de gráfico com octave-cli
-x = 0:0.1:2*pi;
-y = sin(x);
+x = 1:1:8;
 
-figure;
-plot(x, y);
-title('Função Seno');
-xlabel('x');
-ylabel('sin(x)');
-grid on;
-
-% Pause para manter a janela aberta
-disp('Gráfico plotado! Pressione Enter para fechar...');
-pause;
+sum(x.^2) % Soma dos elementos do vetor x.
