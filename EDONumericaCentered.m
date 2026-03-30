@@ -1,4 +1,6 @@
-% Solução numérica da EDO usando método forward
+% Solução numérica da EDO usando método centrado
+
+tic; % Iniciando o cronômetro para medir o tempo de execução do código.
 
 % Definindo variáveis
 coef_a = 1;
@@ -7,7 +9,7 @@ coef_c = 1;
 L = 10; % Comprimento do domínio
 U_0 = 3;
 U_L = 11;
-N_p = 100; % Número de partições
+N_p = 10000; % Número de partições
 N_points = N_p + 1; % Número de pontos
 h = L / N_p; % Tamanho de cada partição
 x = 0:h:L; % Malha
@@ -23,9 +25,9 @@ Img(1) = U_0;
 Img(N_points) = U_L;
 
 % Componentes que multiplicam u(x-h), u(x) e u(x+h) respectivamente
-A = coef_a / h^2;
-B = -2 * coef_a / h^2  - coef_b / h + coef_c;
-C = coef_a / h^2 + coef_b / h;
+A = coef_a / h^2 - coef_b / (2*h);
+B = -2 * coef_a / h^2  - coef_c;
+C = coef_a / h^2 + coef_b / (2*h);
 
 %Construindo a matriz A do sistema linear
 for i = 1:N_points
@@ -58,4 +60,5 @@ plot(x, Y, "b", "LineWidth", 1.5);
 hold on;
 plot(x, (abs(an_image - Y)), "r", "LineWidth", 1.5);
 legend("Solução analítica", "Solução numérica", "Erro", "location", "best");
+toc % Parando o cronômetro e mostrando o tempo de execução do código.
 pause;
