@@ -6,16 +6,26 @@ N = input('Enter the number of elements (size of a basis for the ODE): ');
 f = input("Enter the polynomial function f(x), (for example, 2x.^2 + 3): ", 's');
 f = str2func(['@(x) ' f]);
 
+n = 10^3; % Número de partições; Define a precisão das integrais e derivadas.
+h = L/n; % Tamanho de cada partição.
+x = 0:h:L; % Vetor de pontos para as integrais e derivadas.
+
+f = f(x); % Calculando os valores de f(x) para cada ponto em x.
+
 % Definindo a base.
-basis = {};
+basis = zeros(N, n+1);
 for i = 1:N
-    basis{end + 1} = @(x) x.^(i).*(x-L);
+    for j = 1:(n+1)
+        basis(i, j) = x(j).^i .* (x(j) - L); % i aqui representa phi_i, e j é cada elemento da partição de phi_i.
+    end
 end
 
 % Calculando derivadas da base.
-dbasis = {}
+dbasis = zeros(N, n+1);
 for i = 1:N
-    dbasis{end + 1} = @(x) (i)*x.^(i-1).*(x-L) + x.^(i);
+    for j = 1:(n+1)
+        dbasis(i, j) = i .* (x(j).^(i-1)) .* (x(j) - L) + x(j).^i; % i aqui representa a derivada de phi_i, e j é cada elemento da partição de d_phi_i.
+    end
 end
 
 % Calculando valores da matriz A.
@@ -23,7 +33,7 @@ A = zeros(N, N);
 
 for i = 1:N
     for j = 1:N
-        A(i, j) = integral(@(x) dbasis{i}(x).*dbasis{j}(x), 0, L);
+        A(i, j) = trapz(x, dbasis(i, :).*dbasis(j, :));
     end
 end
 
@@ -31,7 +41,7 @@ end
 b = zeros(N, 1);
 
 for i = 1:N
-    b(i) = -integral(@(x) f(x).*basis{i}(x), 0, L);
+    b(i) = -trapz(x, f.*basis(i, :)); % Calculando a integral de f(x)*phi_i(x) para cada i.
 end
 
 % Resolvendo o sistema linear Ax = b.
