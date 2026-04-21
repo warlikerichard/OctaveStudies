@@ -52,9 +52,13 @@ functionlog = "";
 for i = 1:N
     termo = sprintf("%g*phi_%d(x)", result(i), i);
     if i != 1
-        functionlog = [functionlog, " + ", termo];
+        if  result(i) >= 0
+            functionlog = [functionlog, " + ", termo];
+        else
+            functionlog = [functionlog, " ", termo];
+        endif
     else
-        functionlog = termo;
+        functionlog = [functionlog, termo];
     endif
 end
 
