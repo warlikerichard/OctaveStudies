@@ -15,8 +15,6 @@ U_L = input("Digite o valor de u(L): ");
 X = linspace(0, L, N); % Vetor de pontos para a base de H1, que vai ter N pontos, incluindo os extremos 0 e L.
 
 A = zeros(N);
-A(1, 1) = 1; % Condição de contorno em x=0.
-A(N, N) = 1; % Condição de contorno em x=L.
 
 % Usaremos as funções chapéu por padrão.
 
@@ -24,16 +22,23 @@ A(N, N) = 1; % Condição de contorno em x=L.
 for i = 2:(N-1)
     for j = 1:N
         if i == j
-            A(i, j) = 2*a/h + c*2*h/3;
-        elseif abs(i - j) == 1
-            A(i, j) = -a/h + b/2 + c/6;
+            A(i, j) = -2*a/h + c*2*h/3;
+        elseif j - i == 1
+            A(i, j) = a/h + b/2 + c*h/6;
+        elseif i - j == 1
+            A(i, j) = a/h - b/2 + c*h/6;
         endif
 
     endfor
 endfor
 
+A(1,:) = 0;  A(1, 1) = 1; % Condição de contorno em x=0.
+A(N, :) = 0; A(N, N) = 1; % Condição de contorno em x=L.
+
 b_ls = zeros(N, 1);
 b_ls(1) = U_0; % Condição de contorno em x=0.
+b_ls(2) = -A(2, 1)*U_0; % Contribuição da condição de contorno em x=0 para o segundo ponto.
+b_ls(N-1) = -A(N-1, N)*U_L; % Contribuição da condição de contorno em x=L para o penúltimo ponto.
 b_ls(N) = U_L; % Condição de contorno em x=L.
 
 result = A\b_ls;
