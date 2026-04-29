@@ -20,16 +20,9 @@ A = zeros(N);
 
 % Vamos definir aqui a matriz global.
 for i = 2:(N-1)
-    for j = 1:N
-        if i == j
-            A(i, j) = -2*a/h + c*2*h/3;
-        elseif j - i == 1
-            A(i, j) = a/h + b/2 + c*h/6;
-        elseif i - j == 1
-            A(i, j) = a/h - b/2 + c*h/6;
-        endif
-
-    endfor
+    A(i, i-1) = a/h - b/2 + c*h/6;
+    A(i, i) = -2*a/h + c*2*h/3;
+    A(i, i+1) = a/h + b/2 + c*h/6;
 endfor
 
 A(1,:) = 0;  A(1, 1) = 1; % Condição de contorno em x=0.
@@ -40,6 +33,9 @@ b_ls(1) = U_0; % Condição de contorno em x=0.
 b_ls(2) = -A(2, 1)*U_0; % Contribuição da condição de contorno em x=0 para o segundo ponto.
 b_ls(N-1) = -A(N-1, N)*U_L; % Contribuição da condição de contorno em x=L para o penúltimo ponto.
 b_ls(N) = U_L; % Condição de contorno em x=L.
+
+A(2, 1) = 0; % Ajuste para a condição de contorno em x=0.
+A(N-1, N) = 0; % Ajuste para a condição de contorno em x=L.
 
 result = A\b_ls;
 
