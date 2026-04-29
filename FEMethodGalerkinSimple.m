@@ -8,7 +8,7 @@ N = 1000;
 
 h = L/(N - 1); % Tamanho de cada partição.
 x = linspace(0, L, N); % Vetor de pontos para as integrais e derivadas.
-f = x;
+f = x.^2 + 3.*x + 2;
 
 % Definindo a base.
 basis = eye(N); % Base canônica, onde cada phi_i é 1 em um ponto específico e 0 nos outros.

@@ -2,17 +2,17 @@
 
 disp("Vamos resolver a EDO do tipo alpha * u''(x) + beta * u'(x) + gamma * u(x) = 0 usando o método de elementos finitos.");
 
-a = input("Digite o valor de alpha: ");
-b = input("Digite o valor de beta: ");
-c = input("Digite o valor de gamma: ");
+a = 1;
+b = 2;
+c = 3; % Valor padrão para gamma
 
-L = input("Digite o comprimento do intervalo [0, L]: ");
-N = input("Digite o número de elementos na base de H1: ");
+L = 25; % Valor padrão para o comprimento do intervalo
+N = 100; % Valor padrão para o número de elementos na base de H1
 
 h = L/(N - 1); % Tamanho de cada elemento.
 
-U_0 = input("Digite o valor de u(0): ");
-U_L = input("Digite o valor de u(L): ");
+U_0 = 5; % Valor padrão para u(0)
+U_L = 15; % Valor padrão para u(L)
 
 X = linspace(0, L, N); % Vetor de pontos para a base de H1, que vai ter N pontos, incluindo os extremos 0 e L.
 
