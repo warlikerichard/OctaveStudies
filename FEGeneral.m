@@ -50,9 +50,9 @@ analitica = sol_an(a, b, c, U_0, U_L, L, X);
 % Veja que cada coeficiente de result representa o valor de u(x) na base de H1, já que cada phi_i só tem valor 1 em um ponto específico e 0 nos outros.
 
 figure;
-plot(X, result, 'b-o', 'LineWidth', 2, 'MarkerSize', 5, 'DisplayName', 'Solução Numérica (Galerkin)');
+plot(X, result, 'b-', 'LineWidth', 2, 'MarkerSize', 5, 'DisplayName', 'Solução Numérica (Galerkin)');
 hold on;
-plot(X, analitica, 'r-s', 'LineWidth', 2, 'MarkerSize', 5, 'DisplayName', 'Solução Analítica');
+plot(X, analitica, 'r--', 'LineWidth', 2, 'MarkerSize', 5, 'DisplayName', 'Solução Analítica');
 hold off;
 title("Comparação: Solução Numérica vs Solução Analítica");
 xlabel("x");
