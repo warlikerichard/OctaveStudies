@@ -1,3 +1,5 @@
+% Warlike Richard da Silva Soares
+
 % Definindo parâmetros.
 U_0 = 0
 U_L = 0
