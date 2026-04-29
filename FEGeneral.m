@@ -1,3 +1,5 @@
+% Resolvendo a EDO do tipo alpha * u''(x) + beta * u'(x) + gamma * u(x) = 0 usando o método de elementos finitos.
+
 disp("Vamos resolver a EDO do tipo alpha * u''(x) + beta * u'(x) + gamma * u(x) = 0 usando o método de elementos finitos.");
 
 a = input("Digite o valor de alpha: ");
