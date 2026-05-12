@@ -1,0 +1,70 @@
+% Resolvendo a EDO do tipo alpha * u''(x) + beta * u'(x) + gamma * u(x) = 0 usando o método de elementos finitos.
+
+disp("Vamos resolver a EDO do tipo alpha * u''(x) + beta * u'(x) + gamma * u(x) = 0 usando o método de elementos finitos.");
+
+a = 1;
+b = 2;
+c = 3; % Valor padrão para gamma
+
+L = 25; % Valor padrão para o comprimento do intervalo
+N = 1000; % Valor padrão para o número de elementos na base de H1
+
+h = L/(N - 1); % Tamanho de cada elemento.
+
+U_0 = 5; % Valor padrão para u(0)
+U_L = 15; % Valor padrão para u(L)
+
+X = linspace(0, L, N); % Vetor de pontos para a base de H1, que vai ter N pontos, incluindo os extremos 0 e L.
+
+A = zeros(N);
+
+% Usaremos as funções chapéu por padrão.
+
+% Construimos as matrizes locais para cada elemento e depois as somamos na matriz global A.
+A_local = zeros(2, 2);
+
+for i = 1:(N-1)
+    A_local =   [-a/h - b/2 + c*h/3,  a/h + b/2 + c*h/6; 
+                  a/h - b/2 + c*h/6, -a/h + b/2 + c*h/3];
+                  
+    A(i, i) = A(i, i) + A_local(1, 1);
+    A(i, i+1) = A(i, i+1) + A_local(1, 2);
+    A(i+1, i) = A(i+1, i) + A_local(2, 1);
+    A(i+1, i+1) = A(i+1, i+1) + A_local(2, 2);
+endfor
+
+A(1,:) = 0;  A(1, 1) = 1; % Condição de contorno em x=0.
+A(N, :) = 0; A(N, N) = 1; % Condição de contorno em x=L.
+
+b_ls = zeros(N, 1);
+b_ls(1) = U_0; % Condição de contorno em x=0.
+b_ls(2) = -A(2, 1)*U_0; % Contribuição da condição de contorno em x=0 para o segundo ponto.
+b_ls(N-1) = -A(N-1, N)*U_L; % Contribuição da condição de contorno em x=L para o penúltimo ponto.
+b_ls(N) = U_L; % Condição de contorno em x=L.
+
+A(2, 1) = 0; % Ajuste para a condição de contorno em x=0.
+A(N-1, N) = 0; % Ajuste para a condição de contorno em x=L.
+
+result = A\b_ls;
+
+disp("Os coeficientes da função u(x) na base de H1 são: ");
+disp(result);
+
+% Calcular solução analítica
+analitica = sol_an(a, b, c, U_0, U_L, L, X);
+
+% Veja que cada coeficiente de result representa o valor de u(x) na base de H1, já que cada phi_i só tem valor 1 em um ponto específico e 0 nos outros.
+
+figure;
+plot(X, result, 'b-', 'LineWidth', 2, 'MarkerSize', 5, 'DisplayName', 'Solução Numérica (Galerkin)');
+hold on;
+plot(X, analitica, 'r--', 'LineWidth', 2, 'MarkerSize', 5, 'DisplayName', 'Solução Analítica');
+hold off;
+title("Comparação: Solução Numérica vs Solução Analítica");
+xlabel("x");
+ylabel("u(x)");
+legend('Location', 'best');
+grid on;
+drawnow;
+
+pause;
